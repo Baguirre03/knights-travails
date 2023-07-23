@@ -47,13 +47,17 @@ function knightMoves(pieceStart, pieceEnd) {
 }
 
 
-function buildTree(array, board, end) {
+function buildTree(array, board, end, visted = []) {
     let root = new Node(array)
     let index = findIndexOfStart(array, board)
-
     if (index == false) return null
+
+    if (visted.includes(index)) return null
+    visted.push(index)
+    console.log(visted)
+
     if (array[0] * array[1] > 64) return null
-    if (array[0 * array[1] < 1]) return null
+    if (array[0] * array[1] < 1) return null
     if (array[0] == end[0] && array[1] == end[1]) { return root }
 
 
@@ -68,15 +72,15 @@ function buildTree(array, board, end) {
         [array[0] - 1, array[1] + 2] //eight
     ]
 
-    root.one = buildTree(options[0], board, end)
-    root.two = buildTree(options[1], board, end)
-    root.three = buildTree(options[2], board, end)
-    root.four = buildTree(options[3], board, end)
-    // root.five = buildTree(options[4], board, end)
-    // root.six = buildTree(options[5], board, end)
-    // root.seven = buildTree(options[6], board, end)
-    // root.eight = buildTree(options[7], board, end)
+    root.one = buildTree(options[0], board, end, visted)
+    root.two = buildTree(options[1], board, end, visted)
+    root.three = buildTree(options[2], board, end, visted)
+    root.four = buildTree(options[3], board, end, visted)
+    root.five = buildTree(options[4], board, end, visted)
+    root.six = buildTree(options[5], board, end, visted)
+    root.seven = buildTree(options[6], board, end, visted)
+    root.eight = buildTree(options[7], board, end, visted)
     return root
 }
 
-knightMoves([1, 1], [3, 3])
+knightMoves([1, 2], [2, 3])
