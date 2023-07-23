@@ -22,10 +22,10 @@ class Node {
         this.two = null
         this.three = null
         this.four = null
-        this.five = null
-        this.six = null
-        this.seven = null
-        this.eight = null
+        // this.five = null
+        // this.six = null
+        // this.seven = null
+        // this.eight = null
     }
 }
 
@@ -35,7 +35,7 @@ function findIndexOfStart(find, board) {
             return i
         }
     }
-    return null
+    return false
 }
 
 function knightMoves(pieceStart, pieceEnd) {
@@ -51,7 +51,7 @@ function buildTree(array, board, end) {
     let root = new Node(array)
     let index = findIndexOfStart(array, board)
 
-    if (index == null) return null
+    if (index == false) return null
     if (array[0] * array[1] > 64) return null
     if (array[0 * array[1] < 1]) return null
     if (array[0] == end[0] && array[1] == end[1]) { return root }
@@ -72,11 +72,11 @@ function buildTree(array, board, end) {
     root.two = buildTree(options[1], board, end)
     root.three = buildTree(options[2], board, end)
     root.four = buildTree(options[3], board, end)
-    root.five = new Node(buildTree(options[4], board, end))
-    root.six = new Node(buildTree(options[5], board, end))
-    root.seven = new Node(buildTree(options[6], board, end))
-    root.eight = new Node(buildTree(options[7], board, end))
+    // root.five = buildTree(options[4], board, end)
+    // root.six = buildTree(options[5], board, end)
+    // root.seven = buildTree(options[6], board, end)
+    // root.eight = buildTree(options[7], board, end)
     return root
 }
 
-knightMoves([1, 1], [4, 4])
+knightMoves([1, 1], [3, 3])
