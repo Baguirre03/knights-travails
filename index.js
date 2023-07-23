@@ -22,10 +22,10 @@ class Node {
         this.two = null
         this.three = null
         this.four = null
-        // this.five = null
-        // this.six = null
-        // this.seven = null
-        // this.eight = null
+        this.five = null
+        this.six = null
+        this.seven = null
+        this.eight = null
     }
 }
 
