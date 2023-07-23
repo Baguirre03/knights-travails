@@ -51,14 +51,14 @@ function knightMoves(pieceStart, pieceEnd) {
 
 
 function buildTree(array, board, end) {
-    if (array == end) { return root }
+    let root = new Node(array)
+
     if (array[0] * array[1] > 64) return null
     if (array[0 * array[1] < 1]) return null
     if (findIndexOfStart(array, board) == null) {
         return null
     }
-
-    let root = new Node(array)
+    if (array[0] == end[0] && array[1] == end[1]) { return root }
 
     let options = [
         [array[0] + 1, array[1] + 2], //one
@@ -72,9 +72,9 @@ function buildTree(array, board, end) {
     ]
 
     root.one = new Node(buildTree(options[0], board, end))
-    root.two = new Node(buildTree(options[1], board, end))
-    root.three = new Node(buildTree(options[2], board, end))
-    root.four = new Node(buildTree(options[3], board, end))
+    // root.two = new Node(buildTree(options[1], board, end))
+    // root.three = new Node(buildTree(options[2], board, end))
+    // root.four = new Node(buildTree(options[3], board, end))
     // root.five = new Node(buildTree(options[4], board, end))
     // root.six = new Node(buildTree(options[5], board, end))
     // root.seven = new Node(buildTree(options[6], board, end))
@@ -83,4 +83,4 @@ function buildTree(array, board, end) {
     return root
 }
 
-knightMoves([1, 1], [1, 2])
+knightMoves([1, 1], [2, 3])
