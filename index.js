@@ -18,14 +18,14 @@ class Game {
 class Node {
     constructor(root) {
         this.data = root
-        this.one = null
-        this.two = null
-        this.three = null
-        this.four = null
-        this.five = null
-        this.six = null
-        this.seven = null
-        this.eight = null
+        // this.one = null
+        // this.two = null
+        // this.three = null
+        // this.four = null
+        // this.five = null
+        // this.six = null
+        // this.seven = null
+        // this.eight = null
     }
 }
 
@@ -38,54 +38,78 @@ function findIndexOfStart(find, board) {
     return false
 }
 
+
 function knightMoves(pieceStart, pieceEnd) {
     let game = new Game(pieceStart)
     let root = findIndexOfStart(game.knight, game.board)
-
-    let tree = buildTree(game.board[root], game.board, pieceEnd)
+    let start = { name: 'root', array: game.board[root] }
+    let tree = buildTree(start, game.board, pieceEnd,)
     console.log(tree)
     // let final = searchTree(tree)
     // console.log(final)
 }
 
-function buildTree(array, board, end, visted = []) {
-    let root = new Node(array)
-    if (root == null) return
+// function addChildNode(name, data, parent) {
+//     let newNode = new Node(data)
+//     parent[name] = newNode
+//     return newNode
+// }
 
-    let index = findIndexOfStart(array, board)
-    if (index == false) return null
+function buildTree(array, board, end, visited = [], queue = ['fill']) {
+    if (!queue.length) {
+        return
+    }
+    queue.splice(0, 1)
 
-    if (array[0] == end[0] && array[1] == end[1]) {
-        return root
+    let root = new Node(array.array)
+    if (root == null) {
+        array.parent[array.name] = null
+        return buildTree(queue[0], board, end, visited, queue)
     }
 
-    if (visted.includes(index)) return null
-    visted.push(index)
+    let index = findIndexOfStart(array.array, board)
+    if (index == false) {
+        array.parent[array.name] = null
+        return buildTree(queue[0], board, end, visited, queue)
+    }
 
-    if (array[0] * array[1] > 64) return null
-    if (array[0] * array[1] < 1) return null
+    if (array.array[0] == end[0] && array.array[1] == end[1]) {
+        array.parent[array.name] = root
+        return buildTree(queue[0], board, end, visited, queue)
+    }
 
+    if (visited.includes(index)) {
+        array.parent[array.name] = null
+        return buildTree(queue[0], board, end, visited, queue)
+    }
+    visited.push(index)
 
-    let options = [
-        [array[0] + 1, array[1] + 2], //one
-        [array[0] + 2, array[1] + 1], //two
-        [array[0] + 2, array[1] - 1], //three
-        [array[0] + 1, array[1] - 2], //four
-        [array[0] - 1, array[1] - 2], //five
-        [array[0] - 2, array[1] - 1], //six
-        [array[0] - 2, array[1] + 1], //seven
-        [array[0] - 1, array[1] + 2] //eight
-    ]
+    if (array.array[0] * array.array[1] > 64) {
+        array.parent[array.name] = null
+        return buildTree(queue[0], board, end, visited, queue)
+    }
+    if (array.array[0] * array.array[1] < 1) {
+        array.parent[array.name] = null
+        return buildTree(queue[0], board, end, visited, queue)
+    }
 
-    root.one = buildTree(options[0], board, end, visted)
-    root.two = buildTree(options[1], board, end, visted)
-    root.three = buildTree(options[2], board, end, visted)
-    root.four = buildTree(options[3], board, end, visted)
-    root.five = buildTree(options[4], board, end, visted)
-    root.six = buildTree(options[5], board, end, visted)
-    root.seven = buildTree(options[6], board, end, visted)
-    root.eight = buildTree(options[7], board, end, visted)
+    if (array.parent) {
+        array.parent[array.name] = root
+    }
 
+    let options = {
+        one: { name: 'one', array: [array.array[0] + 1, array.array[1] + 2], parent: root },
+        two: { name: 'two', array: [array.array[0] + 2, array.array[1] + 1], parent: root },
+        three: { name: 'three', array: [array.array[0] + 2, array.array[1] - 1], parent: root },
+        four: { name: 'four', array: [array.array[0] + 1, array.array[1] - 2], parent: root },
+        five: { name: 'five', array: [array.array[0] - 1, array.array[1] - 2], parent: root },
+        six: { name: 'six', array: [array.array[0] - 2, array.array[1] - 1], parent: root },
+        seven: { name: 'seven', array: [array.array[0] - 2, array.array[1] + 1], parent: root },
+        eight: { name: 'eight', array: [array.array[0] - 1, array.array[1] + 2], parent: root }
+    }
+
+    queue.push(options.one, options.two, options.three, options.four, options.five, options.six, options.seven, options.eight)
+    buildTree(queue[0], board, end, visited, queue)
     return root
 }
 
