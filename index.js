@@ -44,21 +44,26 @@ function knightMoves(pieceStart, pieceEnd) {
 
     let tree = buildTree(game.board[root], game.board, pieceEnd)
     console.log(tree)
+    // console.log(tree.one.one.one.three.two, 'noe')
+
 }
 
 
-function buildTree(array, board, end, visted = []) {
+function buildTree(array, board, end, visted = [], counter = 1) {
+    counter++
     let root = new Node(array)
+    if (root == null) return
     let index = findIndexOfStart(array, board)
     if (index == false) return null
+    if (array[0] == end[0] && array[1] == end[1]) {
+        return root
+    }
 
     if (visted.includes(index)) return null
     visted.push(index)
-    console.log(visted)
 
     if (array[0] * array[1] > 64) return null
     if (array[0] * array[1] < 1) return null
-    if (array[0] == end[0] && array[1] == end[1]) { return root }
 
 
     let options = [
@@ -72,15 +77,16 @@ function buildTree(array, board, end, visted = []) {
         [array[0] - 1, array[1] + 2] //eight
     ]
 
-    root.one = buildTree(options[0], board, end, visted)
-    root.two = buildTree(options[1], board, end, visted)
-    root.three = buildTree(options[2], board, end, visted)
-    root.four = buildTree(options[3], board, end, visted)
-    root.five = buildTree(options[4], board, end, visted)
-    root.six = buildTree(options[5], board, end, visted)
-    root.seven = buildTree(options[6], board, end, visted)
-    root.eight = buildTree(options[7], board, end, visted)
+    root.one = buildTree(options[0], board, end, visted, counter)
+    root.two = buildTree(options[1], board, end, visted, counter)
+    root.three = buildTree(options[2], board, end, visted, counter)
+    root.four = buildTree(options[3], board, end, visted, counter)
+    root.five = buildTree(options[4], board, end, visted, counter)
+    root.six = buildTree(options[5], board, end, visted, counter)
+    root.seven = buildTree(options[6], board, end, visted, counter)
+    root.eight = buildTree(options[7], board, end, visted, counter)
+
     return root
 }
 
-knightMoves([1, 2], [2, 3])
+knightMoves([1, 2], [2, 4])
