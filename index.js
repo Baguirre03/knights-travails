@@ -18,14 +18,6 @@ class Game {
 class Node {
     constructor(root) {
         this.data = root
-        // this.one = null
-        // this.two = null
-        // this.three = null
-        // this.four = null
-        // this.five = null
-        // this.six = null
-        // this.seven = null
-        // this.eight = null
     }
 }
 
@@ -41,24 +33,20 @@ function findIndexOfStart(find, board) {
 
 function knightMoves(pieceStart, pieceEnd) {
     let game = new Game(pieceStart)
+
     let root = findIndexOfStart(game.knight, game.board)
     let start = { name: 'root', array: game.board[root] }
-    let tree = buildTree(start, game.board, pieceEnd,)
-    console.log(tree)
-    // let final = searchTree(tree)
-    // console.log(final)
-}
 
-// function addChildNode(name, data, parent) {
-//     let newNode = new Node(data)
-//     parent[name] = newNode
-//     return newNode
-// }
+    let tree = buildTree(start, game.board, pieceEnd)
+    let search = searchTree(tree, pieceEnd)
+    console.log(search)
+}
 
 function buildTree(array, board, end, visited = [], queue = ['fill']) {
     if (!queue.length) {
         return
     }
+
     queue.splice(0, 1)
 
     let root = new Node(array.array)
@@ -73,8 +61,19 @@ function buildTree(array, board, end, visited = [], queue = ['fill']) {
         return buildTree(queue[0], board, end, visited, queue)
     }
 
+    if (array.array[0] * array.array[1] > 64) {
+        array.parent[array.name] = null
+        return buildTree(queue[0], board, end, visited, queue)
+    }
+
+    if (array.array[0] * array.array[1] < 1) {
+        array.parent[array.name] = null
+        return buildTree(queue[0], board, end, visited, queue)
+    }
+
     if (array.array[0] == end[0] && array.array[1] == end[1]) {
         array.parent[array.name] = root
+        queue.splice(0, 2)
         return buildTree(queue[0], board, end, visited, queue)
     }
 
@@ -82,16 +81,8 @@ function buildTree(array, board, end, visited = [], queue = ['fill']) {
         array.parent[array.name] = null
         return buildTree(queue[0], board, end, visited, queue)
     }
-    visited.push(index)
 
-    if (array.array[0] * array.array[1] > 64) {
-        array.parent[array.name] = null
-        return buildTree(queue[0], board, end, visited, queue)
-    }
-    if (array.array[0] * array.array[1] < 1) {
-        array.parent[array.name] = null
-        return buildTree(queue[0], board, end, visited, queue)
-    }
+    visited.push(index)
 
     if (array.parent) {
         array.parent[array.name] = root
@@ -109,60 +100,30 @@ function buildTree(array, board, end, visited = [], queue = ['fill']) {
     }
 
     queue.push(options.one, options.two, options.three, options.four, options.five, options.six, options.seven, options.eight)
+
     buildTree(queue[0], board, end, visited, queue)
     return root
 }
 
-// function searchTree(tree, queue = ['filler'], final = []) {
-//     if (tree.one == null && tree.two == null && tree.three == null && tree.four == null && tree.five == null && tree.six == null && tree.seven == null && tree.eight == null) {
-//         return final
-//     }
-//     if (!queue.length) {
-//         return final
-//     }
+function searchTree(tree, find, final = [], queue = ['fill']) {
+    if (!queue.length) {
+        return
+    }
+    queue.splice(0, 1)
 
-//     queue.splice(0, 1)
+    if (tree == null) {
+        return searchTree(queue[0], find, final, queue)
+    }
 
-//     if (tree == null) {
-//         return searchTree(queue[0], queue)
-//     }
-//     console.log(tree.data)
-//     final.push(tree.data)
+    if (tree.data[0] == find[0] && tree.data[1] == find[1]) {
+        final.push(tree.data)
+        return final
+    }
 
-//     if (tree.one != null) {
-//         queue.push(tree.one)
-//         return searchTree(queue[0], queue)
-//     }
-//     if (tree.two != null) {
-//         queue.push(tree.two)
-//         return searchTree(queue[0], queue)
-//     }
-//     if (tree.three != null) {
-//         queue.push(tree.three)
-//         return searchTree(queue[0], queue)
-//     }
-//     if (tree.four != null) {
-//         queue.push(tree.four)
-//         return searchTree(queue[0], queue)
-//     }
-//     if (tree.five != null) {
-//         queue.push(tree.five)
-//         return searchTree(queue[0], queue)
-//     }
-//     if (tree.six != null) {
-//         queue.push(tree.six)
-//         return searchTree(queue[0], queue)
-//     }
-//     if (tree.seven != null) {
-//         queue.push(tree.seven)
-//         return searchTree(queue[0], queue)
-//     }
-//     if (tree.eight != null) {
-//         queue.push(tree.eight)
-//         return searchTree(queue[0], queue)
-//     }
-
-//     return final
-// }
+    queue.push(tree.one, tree.two, tree.three, tree.four, tree.five, tree.six, tree.seven, tree.eight)
+    final.push(tree.data)
+    return searchTree(queue[0], find, final, queue)
+}
 
 knightMoves([3, 3], [4, 3])
+
