@@ -37,17 +37,17 @@ function knightMoves(pieceStart, pieceEnd) {
     let root = findIndexOfStart(game.knight, game.board)
     let start = { name: 'root', array: game.board[root] }
 
-    let tree = buildTree(start, game.board, pieceEnd)
-    console.log(tree)
+    let final = buildTree(start, game.board, pieceEnd)
+    return Array(...final.prev, final.data)
 }
 
 function buildTree(array, board, end, visited = [], queue = ['fill']) {
     if (!queue.length) {
         return
     }
-    queue.splice(0, 1)
 
     let root = new Node(array.array)
+    queue.splice(0, 1)
     if (root == null) {
         array.parent[array.name] = null
         return buildTree(queue[0], board, end, visited, queue)
@@ -90,18 +90,18 @@ function buildTree(array, board, end, visited = [], queue = ['fill']) {
 
     if (array.array[0] == end[0] && array.array[1] == end[1]) {
         if (array.parent.prev) {
-            root.prev = new Array(array.parent.prev, array.parent.data)
+            root.prev = Array(...array.parent.prev, array.parent.data)
         } else {
-            root.prev = array.parent.data
+            root.prev = [array.parent.data]
         }
         array.parent[array.name] = root
-        queue.splice(0, 2)
-        return buildTree(queue[0], board, end, visited, queue)
+        queue.splice(1)
+        return root
     }
 
     if (array.parent) {
         if (array.parent.prev) {
-            root.prev = new Array(...array.parent.prev, array.parent.data)
+            root.prev = Array(...array.parent.prev, array.parent.data)
         } else {
             root.prev = [array.parent.data]
         }
@@ -110,9 +110,7 @@ function buildTree(array, board, end, visited = [], queue = ['fill']) {
 
 
     queue.push(options.one, options.two, options.three, options.four, options.five, options.six, options.seven, options.eight)
-    buildTree(queue[0], board, end, visited, queue)
-    return root
+    return buildTree(queue[0], board, end, visited, queue)
 }
 
-knightMoves([1, 1], [4, 4])
-
+console.log(knightMoves([1, 1], [4, 4]))
