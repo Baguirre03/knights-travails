@@ -38,6 +38,11 @@ function knightMoves(pieceStart, pieceEnd) {
     let start = { name: 'root', array: game.board[root] }
 
     let final = buildTree(start, game.board, pieceEnd)
+
+    console.log(final)
+    if (!final.prev) {
+        return final
+    }
     return Array(...final.prev, final.data)
 }
 
@@ -65,6 +70,9 @@ function buildTree(array, board, end, visited = [], queue = ['fill']) {
     }
 
     if (!array.parent) {
+        if (array.array[0] == end[0] && array.array[1] == end[1]) {
+            return root
+        }
         queue.push(options.one, options.two, options.three, options.four, options.five, options.six, options.seven, options.eight)
         return buildTree(queue[0], board, end, visited, queue)
     }
@@ -113,4 +121,8 @@ function buildTree(array, board, end, visited = [], queue = ['fill']) {
     return buildTree(queue[0], board, end, visited, queue)
 }
 
+// console.log(knightMoves([1, 1], [2, 3]))
 console.log(knightMoves([1, 1], [4, 4]))
+console.log(knightMoves([4, 4], [1, 1]))
+console.log(knightMoves([3, 3], [4, 3]))
+
