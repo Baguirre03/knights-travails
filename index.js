@@ -38,12 +38,19 @@ function knightMoves(pieceStart, pieceEnd) {
     let start = { name: 'root', array: game.board[root] }
 
     let final = buildTree(start, game.board, pieceEnd)
-
-    console.log(final)
     if (!final.prev) {
         return final
     }
-    return Array(...final.prev, final.data)
+    return formatFinal(final.prev, final.data)
+}
+
+function formatFinal(array, last) {
+    let message = 'Path Taken: '
+    array.forEach((array) => {
+        message += `-> [${array}] `
+    })
+    message += `-> [${last}]`
+    return message
 }
 
 function buildTree(array, board, end, queue = ['fill']) {
