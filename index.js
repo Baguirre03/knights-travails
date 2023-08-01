@@ -16,8 +16,8 @@ class Game {
 }
 
 class Node {
-    constructor(root) {
-        this.data = root
+    constructor(data) {
+        this.data = data
     }
 }
 
@@ -46,16 +46,16 @@ function knightMoves(pieceStart, pieceEnd) {
     return Array(...final.prev, final.data)
 }
 
-function buildTree(array, board, end, visited = [], queue = ['fill']) {
+function buildTree(array, board, end, queue = ['fill']) {
     if (!queue.length) {
         return
     }
+    queue.splice(0, 1)
 
     let root = new Node(array.array)
-    queue.splice(0, 1)
     if (root == null) {
         array.parent[array.name] = null
-        return buildTree(queue[0], board, end, visited, queue)
+        return buildTree(queue[0], board, end, queue)
     }
 
     let options = {
@@ -74,26 +74,32 @@ function buildTree(array, board, end, visited = [], queue = ['fill']) {
             return root
         }
         queue.push(options.one, options.two, options.three, options.four, options.five, options.six, options.seven, options.eight)
-        return buildTree(queue[0], board, end, visited, queue)
+        return buildTree(queue[0], board, end, queue)
     }
 
     let index = findIndexOfStart(array.array, board)
     if (index == false) {
         array.parent[array.name] = null
-        return buildTree(queue[0], board, end, visited, queue)
+        return buildTree(queue[0], board, end, queue)
     }
-    if (visited.includes(index)) {
-        array.parent[array.name] = null
-        return buildTree(queue[0], board, end, visited, queue)
-    }
-    visited.push(index)
 
     if (array.array[0] * array.array[1] > 64) {
         array.parent[array.name] = null
-        return buildTree(queue[0], board, end, visited, queue)
+        return buildTree(queue[0], board, end, queue)
     } else if (array.array[0] * array.array[1] < 1) {
         array.parent[array.name] = null
-        return buildTree(queue[0], board, end, visited, queue)
+        return buildTree(queue[0], board, end, queue)
+    }
+
+    if (array.parent.prev) {
+        let a = array.parent.prev
+        let b = root.data
+        for (let i = 0; i < a.length; i++) {
+            if (a[i][0] === b[0] && a[i][1] === b[1]) {
+                // queue.splice(1)
+                return buildTree(queue[0], board, end, queue)
+            }
+        }
     }
 
     if (array.array[0] == end[0] && array.array[1] == end[1]) {
@@ -118,11 +124,11 @@ function buildTree(array, board, end, visited = [], queue = ['fill']) {
 
 
     queue.push(options.one, options.two, options.three, options.four, options.five, options.six, options.seven, options.eight)
-    return buildTree(queue[0], board, end, visited, queue)
+    return buildTree(queue[0], board, end, queue)
 }
 
 // console.log(knightMoves([1, 1], [2, 3]))
-console.log(knightMoves([1, 1], [4, 4]))
-console.log(knightMoves([4, 4], [1, 1]))
-console.log(knightMoves([3, 3], [4, 3]))
+// console.log(knightMoves([1, 1], [4, 4]))
+// console.log(knightMoves([3, 3], [4, 3]))
+console.log(knightMoves([1, 8], [8, 1]))
 
