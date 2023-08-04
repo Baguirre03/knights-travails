@@ -53,7 +53,7 @@ function knightMoves(pieceStart, pieceEnd) {
 function formatFinal(array, last) {
     let message = 'Path Taken: '
     if (!array) {
-        return message += `-> [${last}] -> [${last}] (doesnt move)`
+        return message += `-> [${last}] -> [${last}] (doesnt move!)`
     }
     array.forEach((array) => {
         message += `-> [${array}] `
@@ -133,17 +133,25 @@ function buildTree(array, board, end, queue = ['fill']) {
     return buildTree(queue[0], board, end, queue)
 }
 
+function removeFromQueue(arr, remove) {
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].array[0] == remove[0] && arr[i].array[1] == remove[1]) {
+            arr.splice(i, 1)
+        }
+    }
+    return arr
+}
+
 console.log(knightMoves([1, 1], [2, 3]))
 console.log(knightMoves([1, 1], [4, 4]))
-// console.log(knightMoves([8, 8], [1, 1]))
 console.log(knightMoves([3, 3], [4, 3]))
 console.log(knightMoves([1, 8], [1, 8]))
 
 //error testing
-// console.log(knightMoves([4, 13], [1, 8]))
-// console.log(knightMoves('', [1, 8]))
-// console.log(knightMoves([1, 1], [1, 0]))
-// console.log(knightMoves('hello', [1, 1]))
+console.log(knightMoves([4, 13], [1, 8]))
+console.log(knightMoves('', [1, 8]))
+console.log(knightMoves([1, 1], [1, 0]))
+console.log(knightMoves('hello', [1, 1]))
 
 
 
