@@ -99,14 +99,6 @@ function buildTree(array, board, end, queue = ['fill']) {
         return buildTree(queue[0], board, end, queue)
     }
 
-    if (array.array[0] * array.array[1] > 64) {
-        array.parent[array.name] = null
-        return buildTree(queue[0], board, end, queue)
-    } else if (array.array[0] * array.array[1] < 1) {
-        array.parent[array.name] = null
-        return buildTree(queue[0], board, end, queue)
-    }
-
     if (array.parent.prev) {
         let a = array.parent.prev
         let b = root.data
@@ -143,13 +135,15 @@ function buildTree(array, board, end, queue = ['fill']) {
 
 console.log(knightMoves([1, 1], [2, 3]))
 console.log(knightMoves([1, 1], [4, 4]))
+// console.log(knightMoves([8, 8], [1, 1]))
 console.log(knightMoves([3, 3], [4, 3]))
 console.log(knightMoves([1, 8], [1, 8]))
+
 //error testing
-console.log(knightMoves([4, 13], [1, 8]))
-console.log(knightMoves('', [1, 8]))
-console.log(knightMoves([1, 1], [1, 0]))
-console.log(knightMoves('hello', [1, 1]))
+// console.log(knightMoves([4, 13], [1, 8]))
+// console.log(knightMoves('', [1, 8]))
+// console.log(knightMoves([1, 1], [1, 0]))
+// console.log(knightMoves('hello', [1, 1]))
 
 
 
