@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 /* eslint-disable no-console */
 class Piece {
   constructor(x, y, prev) {
@@ -27,9 +28,8 @@ class Piece {
     const options = cords.map((opt) => {
       if (this.tests(this.x) || this.tests(this.y)) return null;
       return new Piece(opt[0] + this.x, opt[1] + this.y, this);
-    });
-    const filtered = options.filter((n) => n);
-    this.setMoves(filtered);
+    }).filter((n) => n);
+    this.setMoves(options);
   }
 
   setPrev(prev) {
