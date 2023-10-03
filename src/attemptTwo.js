@@ -14,6 +14,10 @@ class Piece {
     this.moves = moves;
   }
 
+  numberfy() {
+    return this.x.toString() + this.y.toString();
+  }
+
   getAdjacents() {
     return [
       [1, 2], [1, -2],
@@ -31,10 +35,6 @@ class Piece {
     }).filter((n) => n);
     this.setMoves(options);
   }
-
-  setPrev(prev) {
-    this.prev = prev;
-  }
 }
 
 const traverse = (piece) => {
@@ -49,21 +49,21 @@ const traverse = (piece) => {
 };
 
 const search = (piece, find) => {
-  const queue = [piece];
+  const queue = [];
   const visited = [];
 
-  let curr = queue[0];
-  queue.shift();
+  let curr = piece;
   curr.moves.forEach((child) => queue.push(child));
 
   while (queue.length > 0) {
-    if (visited.includes(curr.x.toString() + curr.y.toString())) {
+    if (visited.includes(curr.numberfy())) {
       queue.shift();
       curr = queue[0];
     }
+
     if (curr.x === find[0] && curr.y === find[1]) return traverse(curr);
 
-    visited.push(curr.x.toString() + curr.y.toString());
+    visited.push(curr.numberfy());
     curr.setAvailableCords();
     curr.moves.forEach((child) => queue.push(child));
     queue.shift();
@@ -74,8 +74,7 @@ const search = (piece, find) => {
 const KT = ([x, y], [findX, findY]) => {
   const start = new Piece(x, y);
   start.setAvailableCords();
-  const test = search(start, [findX, findY]);
-  return test;
+  return search(start, [findX, findY]);
 };
 
 console.log(KT([1, 3], [2, 7]));
