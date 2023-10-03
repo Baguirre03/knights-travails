@@ -48,19 +48,23 @@ const traverse = (piece) => {
   return string;
 };
 
+const checkVisited = (visited, queue, curr) => {
+  if (!visited.includes(curr.numberfy())) {
+    return curr;
+  }
+  queue.shift();
+  curr = queue[0];
+  return checkVisited(visited, queue, curr);
+};
+
 const search = (piece, find) => {
   const queue = [];
   const visited = [];
 
   let curr = piece;
   curr.moves.forEach((child) => queue.push(child));
-
   while (queue.length > 0) {
-    if (visited.includes(curr.numberfy())) {
-      queue.shift();
-      curr = queue[0];
-    }
-
+    curr = checkVisited(visited, queue, curr);
     if (curr.x === find[0] && curr.y === find[1]) return traverse(curr);
 
     visited.push(curr.numberfy());
@@ -73,9 +77,10 @@ const search = (piece, find) => {
 
 const KT = ([x, y], [findX, findY]) => {
   const start = new Piece(x, y);
+  if (start.tests(start.x) || start.tests(start.y)) return 'Enter valid number 1-8';
   start.setAvailableCords();
   return search(start, [findX, findY]);
 };
+console.log(KT([4, 4], [1, 1]));
 
-console.log(KT([1, 3], [2, 7]));
-console.log(KT([3, 3], [1, 8]));
+module.exports = KT;
